@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>一键复制好评</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #ffd1dc, #ff9ebc);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      width: 90%;
+      max-width: 360px;
+      background: #fff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 15px 40px rgba(255, 105, 180, 0.25);
+      text-align: center;
+      animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      font-size: 20px;
+      color: #ff4f8b;
+      margin-bottom: 10px;
+    }
+
+    .desc {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 20px;
+    }
+
+    .review-box {
+      background: #fff5f8;
+      border-radius: 12px;
+      padding: 15px;
+      font-size: 14px;
+      color: #444;
+      min-height: 80px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .copy-btn {
+      width: 100%;
+      height: 48px;
+      border: none;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #ff6fa5, #ff4f8b);
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.15s ease;
+    }
+
+    .copy-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* 点击波纹动画 */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.6);
+      transform: scale(0);
+      animation: ripple 0.6s linear;
+    }
+
+    @keyframes ripple {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+
+    .tip {
+      margin-top: 12px;
+      font-size: 12px;
+      color: #aaa;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <h1>一键复制好评</h1>
+    <div class="desc">点击按钮，自动复制一条好评到剪切板</div>
+
+    <div class="review-box" id="reviewBox">
+      点击下方按钮生成好评内容
+    </div>
+
+    <button class="copy-btn" id="copyBtn">
+      复制好评
+    </button>
+
+    <div class="tip">复制成功后，直接粘贴即可</div>
+  </div>
+
+  <script>
+    const reviews = [
+      "服务态度非常好，体验感满分，下次还会再来！",
+      "产品质量真的不错，性价比很高，推荐给朋友了。",
+      "客服回复很快，解答也很耐心，非常满意的一次体验。",
+      "整体体验超出预期，细节做得很好，五星好评！",
+      "发货速度快，包装精致，用起来也很顺手。"
+    ];
+
+    const btn = document.getElementById("copyBtn");
+    const box = document.getElementById("reviewBox");
+
+    btn.addEventListener("click", function (e) {
+      // 波纹效果
+      const ripple = document.createElement("span");
+      ripple.className = "ripple";
+      ripple.style.left = e.offsetX + "px";
+      ripple.style.top = e.offsetY + "px";
+      this.appendChild(ripple);
+
+      setTimeout(() => ripple.remove(), 600);
+
+      // 随机好评
+      const text = reviews[Math.floor(Math.random() * reviews.length)];
+      box.innerText = text;
+
+      // 复制
+      navigator.clipboard.writeText(text).then(() => {
+        btn.innerText = "复制成功 ✓";
+        setTimeout(() => {
+          btn.innerText = "复制好评";
+        }, 1500);
+      });
+    });
+  </script>
+</body>
+</html>
